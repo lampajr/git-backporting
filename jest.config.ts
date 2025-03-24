@@ -3,7 +3,13 @@ import type { Config } from "@jest/types";
 const jestConfig: Config.InitialOptions = {
   verbose: true,
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "\\.tsx?$": [
+      "ts-jest",
+      {
+        "useESM": true
+      }
+    ],
+    '\\.jsx?$': ['babel-jest', {plugins: ['@babel/plugin-transform-modules-commonjs'], "useESM": true}]
   },
   moduleNameMapper: {
     "^@bp/(.*)$": "<rootDir>/src/$1",
