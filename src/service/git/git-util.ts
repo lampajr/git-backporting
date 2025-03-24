@@ -1,6 +1,6 @@
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { AuthTokenId } from "@bp/service/configs/configs.types";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { AuthTokenId } from "@bp/service/configs/configs.types.js";
 
 const PUBLIC_GITHUB_URL = "https://github.com";
 const PUBLIC_GITHUB_API = "https://api.github.com";

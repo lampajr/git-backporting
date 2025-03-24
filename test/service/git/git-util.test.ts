@@ -1,5 +1,5 @@
-import { inferGitApiUrl, inferGitClient, inferSquash } from "@bp/service/git/git-util";
-import { GitClientType } from "@bp/service/git/git.types";
+import { inferGitApiUrl, inferGitClient, inferSquash } from "@bp/service/git/git-util.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
 
 describe("check git utilities", () => {
 

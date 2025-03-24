@@ -1,8 +1,8 @@
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitPullRequest, GitClientType } from "@bp/service/git/git.types";
-import GitHubClient from "@bp/service/git/github/github-client";
-import { MERGED_PR_FIXTURE, REPO, TARGET_OWNER } from "../../../support/mock/github-data";
-import { mockGitHubClient } from "../../../support/mock/git-client-mock-support";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitPullRequest, GitClientType } from "@bp/service/git/git.types.js";
+import GitHubClient from "@bp/service/git/github/github-client.js";
+import { MERGED_PR_FIXTURE, REPO, TARGET_OWNER } from "../../../support/mock/github-data.js";
+import { mockGitHubClient } from "../../../support/mock/git-client-mock-support.js";
 
 describe("github service", () => {
 

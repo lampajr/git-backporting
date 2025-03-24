@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { AuthTokenId } from "@bp/service/configs/configs.types";
+import { AuthTokenId } from "@bp/service/configs/configs.types.js";
 import * as fs from "fs";
 
 export const addProcessArgs = (args: string[]) => {

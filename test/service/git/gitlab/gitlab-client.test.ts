@@ -1,7 +1,7 @@
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { NEW_GITLAB_MR_ID, SECOND_NEW_GITLAB_MR_ID, getAxiosMocked, postAxiosMocked, putAxiosMocked } from "../../../support/mock/git-client-mock-support";
-import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types";
-import GitLabClient from "@bp/service/git/gitlab/gitlab-client";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { NEW_GITLAB_MR_ID, SECOND_NEW_GITLAB_MR_ID, getAxiosMocked, postAxiosMocked, putAxiosMocked } from "../../../support/mock/git-client-mock-support.js";
+import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
 import axios from "axios";
 
 jest.mock("axios");

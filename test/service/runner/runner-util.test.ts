@@ -1,4 +1,4 @@
-import { injectError, injectTargetBranch } from "@bp/service/runner/runner-util";
+import { injectError, injectTargetBranch } from "@bp/service/runner/runner-util.js";
 
 describe("check runner utilities", () => {
     test("properly inject error message", () => {

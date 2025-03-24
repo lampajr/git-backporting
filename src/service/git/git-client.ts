@@ -1,4 +1,4 @@
-import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types";
+import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types.js";
 
 /**
  * Git management service interface, which provides a common API for interacting 

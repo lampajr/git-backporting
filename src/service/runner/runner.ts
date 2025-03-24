@@ -1,15 +1,15 @@
-import ArgsParser from "@bp/service/args/args-parser";
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser";
-import GitCLIService from "@bp/service/git/git-cli";
-import GitClient from "@bp/service/git/git-client";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types";
-import LoggerService from "@bp/service/logger/logger-service";
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
-import { inferGitClient, inferGitApiUrl, getGitTokenFromEnv } from "@bp/service/git/git-util";
-import { injectError, injectTargetBranch } from "./runner-util";
+import ArgsParser from "@bp/service/args/args-parser.js";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser.js";
+import GitCLIService from "@bp/service/git/git-cli.js";
+import GitClient from "@bp/service/git/git-client.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
+import { inferGitClient, inferGitApiUrl, getGitTokenFromEnv } from "@bp/service/git/git-util.js";
+import { injectError, injectTargetBranch } from "./runner-util.js";
 
 interface Git {
   gitClientType: GitClientType;

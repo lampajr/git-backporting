@@ -1,10 +1,10 @@
-import LoggerService from "@bp/service/logger/logger-service";
-import GitClient from "@bp/service/git/git-client";
-import { inferSquash } from "@bp/service/git/git-util";
-import { GitPullRequest, BackportPullRequest, GitClientType } from "@bp/service/git/git.types";
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import GitClient from "@bp/service/git/git-client.js";
+import { inferSquash } from "@bp/service/git/git-util.js";
+import { GitPullRequest, BackportPullRequest, GitClientType } from "@bp/service/git/git.types.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
 import { CommitSchema, MergeRequestSchema, UserSchema } from "@gitbeaker/rest";
-import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper";
+import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper.js";
 import axios, { Axios } from "axios";
 import https from "https";
 

@@ -1,5 +1,5 @@
-import LoggerService from "@bp/service/logger/logger-service";
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
 import { Octokit } from "@octokit/rest";
 
 /**

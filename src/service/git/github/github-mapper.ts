@@ -1,6 +1,6 @@
-import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types";
+import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types.js";
 import { PullRequest, User } from "@octokit/webhooks-types";
-import GitResponseMapper from "@bp/service/git/git-mapper";
+import GitResponseMapper from "@bp/service/git/git-mapper.js";
 
 export default class GitHubMapper implements GitResponseMapper<PullRequest, "open" | "closed"> {
 

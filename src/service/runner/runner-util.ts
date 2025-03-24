@@ -1,4 +1,4 @@
-import { MESSAGE_ERROR_PLACEHOLDER, MESSAGE_TARGET_BRANCH_PLACEHOLDER } from "@bp/service/configs/configs.types";
+import { MESSAGE_ERROR_PLACEHOLDER, MESSAGE_TARGET_BRANCH_PLACEHOLDER } from "@bp/service/configs/configs.types.js";
 
 /**
  * Inject the error message in the provided `message`.

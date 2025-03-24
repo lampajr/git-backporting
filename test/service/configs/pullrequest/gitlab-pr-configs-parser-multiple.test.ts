@@ -1,12 +1,12 @@
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { getAxiosMocked } from "../../../support/mock/git-client-mock-support";
-import { MERGED_SQUASHED_MR } from "../../../support/mock/gitlab-data";
-import GitLabClient from "@bp/service/git/gitlab/gitlab-client";
-import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { getAxiosMocked } from "../../../support/mock/git-client-mock-support.js";
+import { MERGED_SQUASHED_MR } from "../../../support/mock/gitlab-data.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
+import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper.js";
 
 jest.spyOn(GitLabMapper.prototype, "mapPullRequest");
 jest.spyOn(GitLabClient.prototype, "getPullRequest");

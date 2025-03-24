@@ -1,14 +1,14 @@
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { getAxiosMocked } from "../../../support/mock/git-client-mock-support";
-import { CLOSED_NOT_MERGED_MR, MERGED_SQUASHED_MR, OPEN_MR } from "../../../support/mock/gitlab-data";
-import GHAArgsParser from "@bp/service/args/gha/gha-args-parser";
-import { createTestFile, removeTestFile, resetEnvTokens, spyGetInput } from "../../../support/utils";
-import GitLabClient from "@bp/service/git/gitlab/gitlab-client";
-import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { getAxiosMocked } from "../../../support/mock/git-client-mock-support.js";
+import { CLOSED_NOT_MERGED_MR, MERGED_SQUASHED_MR, OPEN_MR } from "../../../support/mock/gitlab-data.js";
+import GHAArgsParser from "@bp/service/args/gha/gha-args-parser.js";
+import { createTestFile, removeTestFile, resetEnvTokens, spyGetInput } from "../../../support/utils.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
+import GitLabMapper from "@bp/service/git/gitlab/gitlab-mapper.js";
 
 const GITLAB_MERGED_PR_SIMPLE_CONFIG_FILE_CONTENT_PATHNAME = "./gitlab-pr-configs-parser-simple-pr-merged.json";
 const GITLAB_MERGED_PR_SIMPLE_CONFIG_FILE_CONTENT = {

@@ -1,9 +1,9 @@
-import GitClient from "@bp/service/git/git-client";
-import { GitClientType } from "@bp/service/git/git.types";
-import GitHubService from "@bp/service/git/github/github-client";
-import LoggerService from "@bp/service/logger/logger-service";
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
-import GitLabClient from "./gitlab/gitlab-client";
+import GitClient from "@bp/service/git/git-client.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import GitHubService from "@bp/service/git/github/github-client.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
 
 /**
  * Singleton git service factory class

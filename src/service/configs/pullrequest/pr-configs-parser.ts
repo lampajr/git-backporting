@@ -1,10 +1,10 @@
-import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList } from "@bp/service/args/args-utils";
-import { Args } from "@bp/service/args/args.types";
-import ConfigsParser from "@bp/service/configs/configs-parser";
-import { Configs, MESSAGE_TARGET_BRANCH_PLACEHOLDER } from "@bp/service/configs/configs.types";
-import GitClient from "@bp/service/git/git-client";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { BackportPullRequest, GitPullRequest } from "@bp/service/git/git.types";
+import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList } from "@bp/service/args/args-utils.js";
+import { Args } from "@bp/service/args/args.types.js";
+import ConfigsParser from "@bp/service/configs/configs-parser.js";
+import { Configs, MESSAGE_TARGET_BRANCH_PLACEHOLDER } from "@bp/service/configs/configs.types.js";
+import GitClient from "@bp/service/git/git-client.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { BackportPullRequest, GitPullRequest } from "@bp/service/git/git.types.js";
 
 export default class PullRequestConfigsParser extends ConfigsParser {
 

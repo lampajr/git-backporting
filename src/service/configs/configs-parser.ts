@@ -1,7 +1,7 @@
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import LoggerService from "../logger/logger-service";
-import LoggerServiceFactory from "../logger/logger-service-factory";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
 
 /**
  * Abstract configuration parser class in charge to parse 

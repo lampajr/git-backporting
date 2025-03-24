@@ -1,7 +1,7 @@
-import ArgsParser from "@bp/service/args/args-parser";
-import { Args } from "@bp/service/args/args.types";
+import ArgsParser from "@bp/service/args/args-parser.js";
+import { Args } from "@bp/service/args/args.types.js";
 import { getInput } from "@actions/core";
-import { getAsBooleanOrUndefined, getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getAsSemicolonSeparatedList, getOrUndefined, readConfigFile } from "@bp/service/args/args-utils";
+import { getAsBooleanOrUndefined, getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getAsSemicolonSeparatedList, getOrUndefined, readConfigFile } from "@bp/service/args/args-utils.js";
 
 export default class GHAArgsParser extends ArgsParser {
 

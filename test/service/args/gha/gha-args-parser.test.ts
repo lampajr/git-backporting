@@ -1,6 +1,6 @@
-import { Args } from "@bp/service/args/args.types";
-import GHAArgsParser from "@bp/service/args/gha/gha-args-parser";
-import { spyGetInput, expectArrayEqual, removeTestFile, createTestFile } from "../../../support/utils";
+import { Args } from "@bp/service/args/args.types.js";
+import GHAArgsParser from "@bp/service/args/gha/gha-args-parser.js";
+import { spyGetInput, expectArrayEqual, removeTestFile, createTestFile } from "../../../support/utils.js";
 
 const SIMPLE_CONFIG_FILE_CONTENT_PATHNAME = "./gha-args-parser-test-simple-config-file-pulls-1.json";
 const SIMPLE_CONFIG_FILE_CONTENT = {

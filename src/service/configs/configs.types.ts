@@ -1,6 +1,6 @@
 
 
-import { BackportPullRequest, GitPullRequest } from "@bp/service/git/git.types";
+import { BackportPullRequest, GitPullRequest } from "@bp/service/git/git.types.js";
 
 export const MESSAGE_ERROR_PLACEHOLDER = "{{error}}";
 export const MESSAGE_TARGET_BRANCH_PLACEHOLDER = "{{target-branch}}";

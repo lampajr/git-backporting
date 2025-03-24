@@ -1,5 +1,5 @@
-import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getOrUndefined, parseArgs, readConfigFile } from "@bp/service/args/args-utils";
-import { createTestFile, expectArrayEqual, removeTestFile, spyGetInput } from "../../support/utils";
+import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getOrUndefined, parseArgs, readConfigFile } from "@bp/service/args/args-utils.js";
+import { createTestFile, expectArrayEqual, removeTestFile, spyGetInput } from "../../support/utils.js";
 import { getInput } from "@actions/core";
 
 const RANDOM_CONFIG_FILE_CONTENT_PATHNAME = "./args-utils-test-random-config-file.json";

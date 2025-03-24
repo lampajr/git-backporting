@@ -1,4 +1,4 @@
-import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types";
+import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types.js";
 
 /**
  * Generic git client response mapper

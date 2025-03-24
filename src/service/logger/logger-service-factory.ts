@@ -1,5 +1,5 @@
-import ConsoleLoggerService from "@bp/service/logger/console-logger-service";
-import LoggerService from "@bp/service/logger/logger-service";
+import ConsoleLoggerService from "@bp/service/logger/console-logger-service.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
 
 /**
  * Singleton factory class

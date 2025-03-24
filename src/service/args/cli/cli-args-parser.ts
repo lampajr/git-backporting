@@ -1,15 +1,15 @@
-import ArgsParser from "@bp/service/args/args-parser";
-import { Args } from "@bp/service/args/args.types";
+import ArgsParser from "@bp/service/args/args-parser.js";
+import { Args } from "@bp/service/args/args.types.js";
 import { Command } from "commander";
-import { name, version, description } from "@bp/../package.json";
-import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getAsSemicolonSeparatedList, readConfigFile } from "@bp/service/args/args-utils";
+import packageJson from "@bp/../package.json";
+import { getAsCleanedCommaSeparatedList, getAsCommaSeparatedList, getAsSemicolonSeparatedList, readConfigFile } from "@bp/service/args/args-utils.js";
 
 export default class CLIArgsParser extends ArgsParser {
 
   private getCommand(): Command {
-    return new Command(name)
-      .version(version)
-      .description(description)
+    return new Command(packageJson.name)
+      .version(packageJson.version)
+      .description(packageJson.description)
       .option("-tb, --target-branch <branches>", "comma separated list of branches where changes must be backported to")
       .option("-tbp, --target-branch-pattern <pattern>", "regular expression pattern to extract target branch(es) from pr labels, the branches will be extracted from the pattern's required `target` named capturing group")
       .option("-pr, --pull-request <pr-url>", "pull request url, e.g., https://github.com/kiegroup/git-backporting/pull/1")

@@ -1,5 +1,5 @@
-import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types";
-import GitResponseMapper from "@bp/service/git/git-mapper";
+import { GitPullRequest, GitRepoState, GitRepository } from "@bp/service/git/git.types.js";
+import GitResponseMapper from "@bp/service/git/git-mapper.js";
 import { MergeRequestSchema, ProjectSchema } from "@gitbeaker/rest";
 import { Axios } from "axios";
 

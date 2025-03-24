@@ -1,12 +1,12 @@
-import ArgsParser from "@bp/service/args/args-parser";
-import Runner from "@bp/service/runner/runner";
-import GitCLIService from "@bp/service/git/git-cli";
-import GitHubClient from "@bp/service/git/github/github-client";
-import GHAArgsParser from "@bp/service/args/gha/gha-args-parser";
-import { createTestFile, removeTestFile, resetEnvTokens, spyGetInput } from "../../support/utils";
-import { mockGitHubClient } from "../../support/mock/git-client-mock-support";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
+import ArgsParser from "@bp/service/args/args-parser.js";
+import Runner from "@bp/service/runner/runner.js";
+import GitCLIService from "@bp/service/git/git-cli.js";
+import GitHubClient from "@bp/service/git/github/github-client.js";
+import GHAArgsParser from "@bp/service/args/gha/gha-args-parser.js";
+import { createTestFile, removeTestFile, resetEnvTokens, spyGetInput } from "../../support/utils.js";
+import { mockGitHubClient } from "../../support/mock/git-client-mock-support.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
 
 const GITHUB_MERGED_PR_W_OVERRIDES_CONFIG_FILE_CONTENT_PATHNAME = "./gha-github-runner-pr-merged-with-overrides.json";
 const GITHUB_MERGED_PR_W_OVERRIDES_CONFIG_FILE_CONTENT = {
@@ -28,7 +28,7 @@ const GITHUB_MERGED_PR_W_OVERRIDES_CONFIG_FILE_CONTENT = {
 };
 
 
-jest.mock("@bp/service/git/git-cli");
+jest.mock("@bp/service/git/git-cli.js");
 jest.spyOn(GitHubClient.prototype, "createPullRequest");
 jest.spyOn(GitHubClient.prototype, "createPullRequestComment");
 jest.spyOn(GitClientFactory, "getOrCreate");

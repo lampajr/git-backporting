@@ -1,14 +1,14 @@
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { mockGitHubClient } from "../../../support/mock/git-client-mock-support";
-import { addProcessArgs, createTestFile, removeTestFile, resetProcessArgs } from "../../../support/utils";
-import { MERGED_PR_FIXTURE, OPEN_PR_FIXTURE, NOT_MERGED_PR_FIXTURE, REPO, TARGET_OWNER, MULT_COMMITS_PR_FIXTURE } from "../../../support/mock/github-data";
-import CLIArgsParser from "@bp/service/args/cli/cli-args-parser";
-import GitHubMapper from "@bp/service/git/github/github-mapper";
-import GitHubClient from "@bp/service/git/github/github-client";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { mockGitHubClient } from "../../../support/mock/git-client-mock-support.js";
+import { addProcessArgs, createTestFile, removeTestFile, resetProcessArgs } from "../../../support/utils.js";
+import { MERGED_PR_FIXTURE, OPEN_PR_FIXTURE, NOT_MERGED_PR_FIXTURE, REPO, TARGET_OWNER, MULT_COMMITS_PR_FIXTURE } from "../../../support/mock/github-data.js";
+import CLIArgsParser from "@bp/service/args/cli/cli-args-parser.js";
+import GitHubMapper from "@bp/service/git/github/github-mapper.js";
+import GitHubClient from "@bp/service/git/github/github-client.js";
 
 const GITHUB_MERGED_PR_SIMPLE_CONFIG_FILE_CONTENT_PATHNAME = "./github-pr-configs-parser-simple-pr-merged.json";
 const GITHUB_MERGED_PR_SIMPLE_CONFIG_FILE_CONTENT = {

@@ -1,4 +1,4 @@
-import GitCLIService from "@bp/service/git/git-cli";
+import GitCLIService from "@bp/service/git/git-cli.js";
 import { FileState, GitActionTypes, MockGithub } from "@kie/mock-github";
 import { spawnSync } from "child_process";
 import { assert } from "console";

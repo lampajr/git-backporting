@@ -1,7 +1,7 @@
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import GitHubClient from "@bp/service/git/github/github-client";
-import GitLabClient from "@bp/service/git/gitlab/gitlab-client";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import GitHubClient from "@bp/service/git/github/github-client.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
 
 describe("git client factory test", () => {
 

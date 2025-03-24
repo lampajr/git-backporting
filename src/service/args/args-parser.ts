@@ -1,4 +1,4 @@
-import { Args } from "@bp/service/args/args.types";
+import { Args } from "@bp/service/args/args.types.js";
 
 /**
  * Abstract arguments parser interface in charge to parse inputs and 

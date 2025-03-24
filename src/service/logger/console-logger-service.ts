@@ -1,5 +1,5 @@
-import Logger from "@bp/service/logger/logger";
-import LoggerService from "@bp/service/logger/logger-service";
+import Logger from "@bp/service/logger/logger.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
 
 export default class ConsoleLoggerService implements LoggerService {
 

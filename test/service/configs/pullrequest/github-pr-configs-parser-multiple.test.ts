@@ -1,13 +1,13 @@
-import { Args } from "@bp/service/args/args.types";
-import { Configs } from "@bp/service/configs/configs.types";
-import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { mockGitHubClient } from "../../../support/mock/git-client-mock-support";
-import { resetProcessArgs } from "../../../support/utils";
-import { MERGED_PR_FIXTURE, REPO, TARGET_OWNER, MULT_COMMITS_PR_FIXTURE } from "../../../support/mock/github-data";
-import GitHubMapper from "@bp/service/git/github/github-mapper";
-import GitHubClient from "@bp/service/git/github/github-client";
+import { Args } from "@bp/service/args/args.types.js";
+import { Configs } from "@bp/service/configs/configs.types.js";
+import PullRequestConfigsParser from "@bp/service/configs/pullrequest/pr-configs-parser.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { mockGitHubClient } from "../../../support/mock/git-client-mock-support.js";
+import { resetProcessArgs } from "../../../support/utils.js";
+import { MERGED_PR_FIXTURE, REPO, TARGET_OWNER, MULT_COMMITS_PR_FIXTURE } from "../../../support/mock/github-data.js";
+import GitHubMapper from "@bp/service/git/github/github-mapper.js";
+import GitHubClient from "@bp/service/git/github/github-client.js";
 
 jest.spyOn(GitHubMapper.prototype, "mapPullRequest");
 jest.spyOn(GitHubClient.prototype, "getPullRequest");

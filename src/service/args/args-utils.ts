@@ -1,4 +1,4 @@
-import { Args } from "@bp/service/args/args.types";
+import { Args } from "@bp/service/args/args.types.js";
 import * as fs from "fs";
 
 /**

@@ -1,10 +1,10 @@
-import GitClient from "@bp/service/git/git-client";
-import { inferSquash } from "@bp/service/git/git-util";
-import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types";
-import GitHubMapper from "@bp/service/git/github/github-mapper";
-import OctokitFactory from "@bp/service/git/github/octokit-factory";
-import LoggerService from "@bp/service/logger/logger-service";
-import LoggerServiceFactory from "@bp/service/logger/logger-service-factory";
+import GitClient from "@bp/service/git/git-client.js";
+import { inferSquash } from "@bp/service/git/git-util.js";
+import { BackportPullRequest, GitClientType, GitPullRequest } from "@bp/service/git/git.types.js";
+import GitHubMapper from "@bp/service/git/github/github-mapper.js";
+import OctokitFactory from "@bp/service/git/github/octokit-factory.js";
+import LoggerService from "@bp/service/logger/logger-service.js";
+import LoggerServiceFactory from "@bp/service/logger/logger-service-factory.js";
 import { Octokit } from "@octokit/rest";
 import { PullRequest } from "@octokit/webhooks-types";
 

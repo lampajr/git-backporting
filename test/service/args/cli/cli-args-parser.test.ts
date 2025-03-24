@@ -1,6 +1,6 @@
-import { Args } from "@bp/service/args/args.types";
-import CLIArgsParser from "@bp/service/args/cli/cli-args-parser";
-import { addProcessArgs, resetProcessArgs, expectArrayEqual, createTestFile, removeTestFile } from "../../../support/utils";
+import { Args } from "@bp/service/args/args.types.js";
+import CLIArgsParser from "@bp/service/args/cli/cli-args-parser.js";
+import { addProcessArgs, resetProcessArgs, expectArrayEqual, createTestFile, removeTestFile } from "../../../support/utils.js";
 
 export const SIMPLE_CONFIG_FILE_CONTENT_PATHNAME = "./cli-args-parser-test-simple-config-file-pulls-1.json";
 export const SIMPLE_CONFIG_FILE_CONTENT = {

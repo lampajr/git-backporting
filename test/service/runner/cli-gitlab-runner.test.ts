@@ -1,14 +1,14 @@
-import ArgsParser from "@bp/service/args/args-parser";
-import Runner from "@bp/service/runner/runner";
-import GitCLIService from "@bp/service/git/git-cli";
-import GitLabClient from "@bp/service/git/gitlab/gitlab-client";
-import CLIArgsParser from "@bp/service/args/cli/cli-args-parser";
-import { addProcessArgs, createTestFile, removeTestFile, resetEnvTokens, resetProcessArgs } from "../../support/utils";
-import { getAxiosMocked } from "../../support/mock/git-client-mock-support";
-import { MERGED_SQUASHED_MR } from "../../support/mock/gitlab-data";
-import GitClientFactory from "@bp/service/git/git-client-factory";
-import { GitClientType } from "@bp/service/git/git.types";
-import { AuthTokenId } from "@bp/service/configs/configs.types";
+import ArgsParser from "@bp/service/args/args-parser.js";
+import Runner from "@bp/service/runner/runner.js";
+import GitCLIService from "@bp/service/git/git-cli.js";
+import GitLabClient from "@bp/service/git/gitlab/gitlab-client.js";
+import CLIArgsParser from "@bp/service/args/cli/cli-args-parser.js";
+import { addProcessArgs, createTestFile, removeTestFile, resetEnvTokens, resetProcessArgs } from "../../support/utils.js";
+import { getAxiosMocked } from "../../support/mock/git-client-mock-support.js";
+import { MERGED_SQUASHED_MR } from "../../support/mock/gitlab-data.js";
+import GitClientFactory from "@bp/service/git/git-client-factory.js";
+import { GitClientType } from "@bp/service/git/git.types.js";
+import { AuthTokenId } from "@bp/service/configs/configs.types.js";
 
 const GITLAB_MERGED_PR_COMPLEX_CONFIG_FILE_CONTENT_PATHNAME = "./cli-gitlab-runner-pr-merged-with-overrides.json";
 const GITLAB_MERGED_PR_COMPLEX_CONFIG_FILE_CONTENT = {
@@ -42,7 +42,7 @@ jest.mock("axios", () => {
   };
 });
 
-jest.mock("@bp/service/git/git-cli");
+jest.mock("@bp/service/git/git-cli.js");
 jest.spyOn(GitLabClient.prototype, "createPullRequest");
 jest.spyOn(GitLabClient.prototype, "createPullRequestComment");
 jest.spyOn(GitClientFactory, "getOrCreate");
