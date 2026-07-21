@@ -63,7 +63,7 @@ export default class GitCLIService {
   async clone(from: string, to: string, branch: string): Promise<void> {
     this.logger.info(`Cloning repository ${from} to ${to}`);
     if (!fs.existsSync(to)) {
-      await simpleGit().clone(this.remoteWithAuth(from), to, ["--quiet", "--shallow-submodules", "--no-tags", "--branch", branch]);
+      await simpleGit().clone(this.remoteWithAuth(from), to, ["--quiet", "--filter=blob:none", "--shallow-submodules", "--no-tags", "--branch", branch]);
       return;
     }
     
