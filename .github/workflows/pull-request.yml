@@ -31,3 +31,21 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm test
+
+  verify-dist:
+    name: Verify dist is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build
+      - name: Check for dist changes
+        run: |
+          if ! git diff --exit-code -- dist; then
+            echo "::error::The dist/ bundle is out of date. Run 'npm ci && npm run build' and commit the result."
+            exit 1
+          fi
