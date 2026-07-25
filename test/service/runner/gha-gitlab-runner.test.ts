@@ -128,7 +128,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "9e15674ebd48e05c6e428a1fa31dbb60a778d644", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-9e15674");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-9e15674", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -180,7 +180,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "ebb1eca696c42fd067658bd9b5267709f78ef38e", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -230,7 +230,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "9e15674ebd48e05c6e428a1fa31dbb60a778d644", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -281,7 +281,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "9e15674ebd48e05c6e428a1fa31dbb60a778d644", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -326,7 +326,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "ebb1eca696c42fd067658bd9b5267709f78ef38e", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -370,7 +370,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "ebb1eca696c42fd067658bd9b5267709f78ef38e", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-ebb1eca", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -414,7 +414,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "ebb1eca696c42fd067658bd9b5267709f78ef38e", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-prod-ebb1eca");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-prod-ebb1eca", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -456,7 +456,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "e4dd336a4a20f394df6665994df382fb1d193a11", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -502,7 +502,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "974519f65c9e0ed65277cd71026657a09fca05e7", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336-974519f");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336-974519f", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -544,7 +544,7 @@ describe("gha runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "e4dd336a4a20f394df6665994df382fb1d193a11", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-e4dd336", undefined);
 
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitLabClient.prototype.createPullRequest).toHaveBeenCalledWith({

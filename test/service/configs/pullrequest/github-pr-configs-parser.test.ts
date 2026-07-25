@@ -43,7 +43,7 @@ describe("github pull request config parser", () => {
   const openPRUrl = `https://github.com/${TARGET_OWNER}/${REPO}/pull/${OPEN_PR_FIXTURE.number}`;
   const notMergedPRUrl = `https://github.com/${TARGET_OWNER}/${REPO}/pull/${NOT_MERGED_PR_FIXTURE.number}`;
   const multipleCommitsPRUrl = `https://github.com/${TARGET_OWNER}/${REPO}/pull/${MULT_COMMITS_PR_FIXTURE.number}`;
-  
+
   let argsParser: CLIArgsParser;
   let configParser: PullRequestConfigsParser;
 
@@ -128,11 +128,11 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
-      title: "[prod] PR Title", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
+      title: "[prod] PR Title",
       body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
       reviewers: ["gh-user", "that-s-a-user"],
       assignees: [],
@@ -301,10 +301,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "custom-branch", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "custom-branch",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: ["gh-user", "that-s-a-user"],
@@ -343,10 +343,10 @@ describe("github pull request config parser", () => {
     expect(configs.folder).toEqual(process.cwd() + "/bp");
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: ["gh-user", "that-s-a-user"],
@@ -415,10 +415,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: ["user1", "user2"],
@@ -487,10 +487,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: [],
@@ -561,10 +561,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: [],
@@ -573,7 +573,42 @@ describe("github pull request config parser", () => {
       comments: [],
     });
   });
-  
+
+  test("override backport source repository", async () => {
+    const args: Args = {
+      dryRun: false,
+      auth: "",
+      pullRequest: mergedPRUrl,
+      targetBranch: "prod",
+      bpRepo: "my-fork/reponame",
+      gitUser: "Me",
+      gitEmail: "me@email.com",
+      reviewers: [],
+      assignees: [],
+      inheritReviewers: false,
+    };
+
+    const configs: Configs = await configParser.parseAndValidate(args);
+
+    expect(configs.backportPullRequests[0]).toEqual({
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      headRepo: {
+        cloneUrl: "https://github.com/my-fork/reponame.git",
+        owner: "my-fork",
+        project: "reponame",
+      },
+      base: "prod",
+      title: "[prod] PR Title",
+      body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
+      reviewers: [],
+      assignees: [],
+      labels: [],
+      comments: [],
+    });
+  });
+
   test("using simple config file", async () => {
     addProcessArgs([
       "-cf",
@@ -623,7 +658,7 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
+      owner: "owner",
       repo: "reponame",
       head: "bp-prod-28f63db",
       base: "prod",
@@ -686,7 +721,7 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
+      owner: "owner",
       repo: "reponame",
       head: "bp-prod-28f63db",
       base: "prod",
@@ -759,7 +794,7 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
+      owner: "owner",
       repo: "reponame",
       head: "bp-prod-0404fb9-11da4e3",
       base: "prod",
@@ -834,10 +869,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: [],
@@ -931,10 +966,10 @@ describe("github pull request config parser", () => {
     });
     expect(configs.backportPullRequests.length).toEqual(1);
     expect(configs.backportPullRequests[0]).toEqual({
-      owner: "owner", 
-      repo: "reponame", 
-      head: "bp-prod-28f63db", 
-      base: "prod", 
+      owner: "owner",
+      repo: "reponame",
+      head: "bp-prod-28f63db",
+      base: "prod",
       title: "New Title",
       body: "New Body Prefix -New Body",
       reviewers: [],

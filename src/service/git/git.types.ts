@@ -28,6 +28,7 @@ export interface BackportPullRequest {
   owner: string, // repository's owner
   repo: string, // repository's name
   head: string, // name of the source branch
+  headRepo?: GitRepository, // optional: source repository, for cross-repository pull requests
   base: string, // name of the target branch
   title: string, // pr title
   body: string, // pr body

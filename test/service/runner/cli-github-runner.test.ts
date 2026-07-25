@@ -73,7 +73,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/2368"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -86,7 +86,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -106,7 +106,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/2368"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -116,7 +116,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -137,7 +137,7 @@ describe("cli runner", () => {
       "-f",
       "folder"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/folder";
@@ -150,7 +150,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -174,7 +174,7 @@ describe("cli runner", () => {
       "-f",
       "/tmp/folder"
     ]);
-    
+
     await runner.execute();
 
     const cwd = "/tmp/folder";
@@ -187,7 +187,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -205,7 +205,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/2368"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -218,7 +218,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -226,15 +226,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -245,6 +245,47 @@ describe("cli runner", () => {
     expect(GitHubClient.prototype.createPullRequest).toHaveReturnedTimes(1);
   });
 
+  test("without dry run using fork backport repo", async () => {
+    addProcessArgs([
+      "-tb",
+      "target",
+      "-pr",
+      "https://github.com/owner/reponame/pull/2368",
+      "--bp-repo",
+      "my-fork/reponame",
+    ]);
+
+    await runner.execute();
+
+    const cwd = process.cwd() + "/bp";
+
+    expect(GitCLIService.prototype.clone).toHaveBeenCalledTimes(1);
+    expect(GitCLIService.prototype.clone).toHaveBeenCalledWith("https://github.com/owner/reponame.git", cwd, "target");
+
+    expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", "fork");
+
+    expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
+    expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        headRepo: {
+          cloneUrl: "https://github.com/my-fork/reponame.git",
+          owner: "my-fork",
+          project: "reponame",
+        },
+        base: "target",
+        title: "[target] PR Title",
+        body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
+        reviewers: ["gh-user", "that-s-a-user"],
+        assignees: [],
+        labels: [],
+        comments: [],
+      }
+    );
+  });
+
   test("same owner", async () => {
     addProcessArgs([
       "-tb",
@@ -252,7 +293,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/8632"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -265,22 +306,22 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(0);
 
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/8632\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -323,7 +364,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-9174896");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/4444/head:pr/4444");
 
@@ -331,15 +372,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "91748965051fae1330ad58d15cf694e103267c87", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-9174896");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-9174896", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-9174896", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-9174896",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/4444\r\n\r\nPlease review and merge",
         reviewers: ["gh-user"],
         assignees: [],
@@ -380,7 +421,7 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenLastCalledWith(cwd, "11da4e38aa3e577ffde6d546f1c52e53b04d3151", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
@@ -418,7 +459,7 @@ describe("cli runner", () => {
       "--assignees",
       "user3,user4",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -431,7 +472,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp_branch_name");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -439,15 +480,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp_branch_name", 
-        base: "target", 
-        title: "New Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp_branch_name",
+        base: "target",
+        title: "New Title",
         body: "New Body Prefix\r\n\r\nNew Body",
         reviewers: ["user1", "user2"],
         assignees: ["user3", "user4"],
@@ -476,7 +517,7 @@ describe("cli runner", () => {
       "--assignees",
       "user3,user4",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -489,7 +530,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp_branch_name");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -497,15 +538,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp_branch_name", 
-        base: "target", 
-        title: "New Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp_branch_name",
+        base: "target",
+        title: "New Title",
         body: "New Body Prefix - New Body",
         reviewers: [],
         assignees: ["user3", "user4"],
@@ -526,7 +567,7 @@ describe("cli runner", () => {
       "cherry-pick :cherries:, backport prod",
       "--inherit-labels",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -539,7 +580,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -547,15 +588,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -575,7 +616,7 @@ describe("cli runner", () => {
       "--labels",
       "first-label, second-label ",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -588,7 +629,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -596,15 +637,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -620,7 +661,7 @@ describe("cli runner", () => {
       "--config-file",
       GITHUB_MERGED_PR_W_OVERRIDES_CONFIG_FILE_CONTENT_PATHNAME,
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -633,7 +674,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp_branch_name");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -641,15 +682,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp_branch_name", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp_branch_name", 
-        base: "target", 
-        title: "New Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp_branch_name",
+        base: "target",
+        title: "New Title",
         body: "New Body Prefix - New Body",
         reviewers: [],
         assignees: ["user3", "user4"],
@@ -668,7 +709,7 @@ describe("cli runner", () => {
       "-pr",
       "https://api.github.com/repos/owner/reponame/pulls/2368"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -681,7 +722,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -689,15 +730,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -716,7 +757,7 @@ describe("cli runner", () => {
       "https://github.com/owner/reponame/pull/8632",
       "--no-squash",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -729,7 +770,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(0);
 
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledTimes(2);
@@ -737,15 +778,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenLastCalledWith(cwd, "11da4e38aa3e577ffde6d546f1c52e53b04d3151", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-0404fb9-11da4e3", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-0404fb9-11da4e3",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/8632\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -768,7 +809,7 @@ describe("cli runner", () => {
       "--bp-branch-name",
       tooLongBranchName,
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -783,7 +824,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, truncatedBranch);
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -791,15 +832,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, truncatedBranch);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, truncatedBranch, undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: truncatedBranch, 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: truncatedBranch,
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -822,7 +863,7 @@ describe("cli runner", () => {
       "--strategy-option",
       "find-renames",
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -835,7 +876,7 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(0);
 
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledTimes(2);
@@ -843,15 +884,15 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenLastCalledWith(cwd, "11da4e38aa3e577ffde6d546f1c52e53b04d3151", "ort", "find-renames", undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-0404fb9-11da4e3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-0404fb9-11da4e3", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-0404fb9-11da4e3",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/8632\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -873,7 +914,7 @@ describe("cli runner", () => {
       "--body",
       "New body"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -886,22 +927,22 @@ describe("cli runner", () => {
 
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(0);
 
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledTimes(1);
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(1);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-target-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(1);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-target-28f63db", 
-        base: "target", 
-        title: "[target] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-target-28f63db",
+        base: "target",
+        title: "[target] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/8632\r\n\r\nNew body",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -921,7 +962,7 @@ describe("cli runner", () => {
       "-f",
       "/tmp/folder"
     ]);
-    
+
     await runner.execute();
 
     const cwd = "/tmp/folder";
@@ -938,7 +979,7 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-v1-28f63db");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-v2-28f63db");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "bp-v3-28f63db");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(3);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -948,17 +989,17 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(3);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v1-28f63db");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v2-28f63db");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v3-28f63db");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v1-28f63db", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v2-28f63db", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "bp-v3-28f63db", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(3);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-v1-28f63db", 
-        base: "v1", 
-        title: "[v1] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-v1-28f63db",
+        base: "v1",
+        title: "[v1] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -966,11 +1007,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-v2-28f63db", 
-        base: "v2", 
-        title: "[v2] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-v2-28f63db",
+        base: "v2",
+        title: "[v2] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -978,11 +1019,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "bp-v3-28f63db", 
-        base: "v3", 
-        title: "[v3] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "bp-v3-28f63db",
+        base: "v3",
+        title: "[v3] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1003,7 +1044,7 @@ describe("cli runner", () => {
       "--bp-branch-name",
       "custom1, custom1, custom2, custom3",
     ]);
-    
+
     await runner.execute();
 
     const cwd = "/tmp/folder";
@@ -1020,7 +1061,7 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom1");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom2");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom3");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(3);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -1030,17 +1071,17 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(3);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom1");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom2");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom1", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom2", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(3);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom1", 
-        base: "v1", 
-        title: "[v1] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom1",
+        base: "v1",
+        title: "[v1] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1048,11 +1089,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom2", 
-        base: "v2", 
-        title: "[v2] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom2",
+        base: "v2",
+        title: "[v2] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1060,11 +1101,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom3", 
-        base: "v3", 
-        title: "[v3] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom3",
+        base: "v3",
+        title: "[v3] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1089,7 +1130,7 @@ describe("cli runner", () => {
       "--bp-branch-name",
       "custom-failure-head",
     ]);
-    
+
     await expect(() => runner.execute()).rejects.toThrow("Failure occurred during one of the backports: [Error: Mocked error ; Error: Mocked error ; Error: Mocked error]");
 
     const cwd = "/tmp/folder";
@@ -1106,7 +1147,7 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v1");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v2");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v3");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(3);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -1116,17 +1157,17 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(3);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v1");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v2");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v1", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v2", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(3);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v1", 
-        base: "v1", 
-        title: "[v1] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v1",
+        base: "v1",
+        title: "[v1] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1134,11 +1175,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v2", 
-        base: "v2", 
-        title: "[v2] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v2",
+        base: "v2",
+        title: "[v2] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1146,11 +1187,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v3", 
-        base: "v3", 
-        title: "[v3] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v3",
+        base: "v3",
+        title: "[v3] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1172,7 +1213,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/8632"
     ]);
-    
+
     await runner.execute();
 
     expect(GitClientFactory.getOrCreate).toHaveBeenCalledTimes(1);
@@ -1191,7 +1232,7 @@ describe("cli runner", () => {
       "-a",
       "mytoken"
     ]);
-    
+
     await runner.execute();
 
     expect(GitClientFactory.getOrCreate).toHaveBeenCalledTimes(1);
@@ -1209,7 +1250,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/8632"
     ]);
-    
+
     await runner.execute();
 
     expect(GitClientFactory.getOrCreate).toHaveBeenCalledTimes(1);
@@ -1225,7 +1266,7 @@ describe("cli runner", () => {
       "-pr",
       "https://github.com/owner/reponame/pull/2368"
     ]);
-    
+
     await runner.execute();
 
     const cwd = process.cwd() + "/bp";
@@ -1253,7 +1294,7 @@ describe("cli runner", () => {
       "custom-failure-head",
       "--enable-err-notification",
     ]);
-    
+
     await expect(() => runner.execute()).rejects.toThrow("Failure occurred during one of the backports: [Error: Mocked error: v1 ; Error: Mocked error: v2 ; Error: Mocked error: v3]");
 
     const cwd = "/tmp/folder";
@@ -1270,7 +1311,7 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v1");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v2");
     expect(GitCLIService.prototype.createLocalBranch).toHaveBeenCalledWith(cwd, "custom-failure-head-v3");
-    
+
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledTimes(3);
     expect(GitCLIService.prototype.fetch).toHaveBeenCalledWith(cwd, "pull/2368/head:pr/2368");
 
@@ -1280,17 +1321,17 @@ describe("cli runner", () => {
     expect(GitCLIService.prototype.cherryPick).toHaveBeenCalledWith(cwd, "28f63db774185f4ec4b57cd9aaeb12dbfb4c9ecc", undefined, undefined, undefined);
 
     expect(GitCLIService.prototype.push).toHaveBeenCalledTimes(3);
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v1");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v2");
-    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v3");
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v1", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v2", undefined);
+    expect(GitCLIService.prototype.push).toHaveBeenCalledWith(cwd, "custom-failure-head-v3", undefined);
 
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledTimes(3);
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v1", 
-        base: "v1", 
-        title: "[v1] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v1",
+        base: "v1",
+        title: "[v1] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1298,11 +1339,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v2", 
-        base: "v2", 
-        title: "[v2] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v2",
+        base: "v2",
+        title: "[v2] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],
@@ -1310,11 +1351,11 @@ describe("cli runner", () => {
         comments: [],
     });
     expect(GitHubClient.prototype.createPullRequest).toHaveBeenCalledWith({
-        owner: "owner", 
-        repo: "reponame", 
-        head: "custom-failure-head-v3", 
-        base: "v3", 
-        title: "[v3] PR Title", 
+        owner: "owner",
+        repo: "reponame",
+        head: "custom-failure-head-v3",
+        base: "v3",
+        title: "[v3] PR Title",
         body: "**Backport:** https://github.com/owner/reponame/pull/2368\r\n\r\nPlease review and merge",
         reviewers: ["gh-user", "that-s-a-user"],
         assignees: [],

@@ -4,7 +4,7 @@ import ConfigsParser from "@bp/service/configs/configs-parser";
 import { Configs, MESSAGE_TARGET_BRANCH_PLACEHOLDER } from "@bp/service/configs/configs.types";
 import GitClient from "@bp/service/git/git-client";
 import GitClientFactory from "@bp/service/git/git-client-factory";
-import { BackportPullRequest, GitPullRequest } from "@bp/service/git/git.types";
+import { BackportPullRequest, GitPullRequest, GitRepository } from "@bp/service/git/git.types";
 
 export default class PullRequestConfigsParser extends ConfigsParser {
 
@@ -14,7 +14,7 @@ export default class PullRequestConfigsParser extends ConfigsParser {
     super();
     this.gitClient = GitClientFactory.getClient();
   }
-  
+
   public async parse(args: Args): Promise<Configs> {
     let pr: GitPullRequest;
     if (args.autoNoSquash) {
@@ -65,7 +65,7 @@ export default class PullRequestConfigsParser extends ConfigsParser {
       },
     };
   }
-  
+
   private getDefaultFolder() {
     return "bp";
   }
@@ -103,31 +103,34 @@ export default class PullRequestConfigsParser extends ConfigsParser {
   }
 
   /**
-   * Create a backport pull request starting from the target branch and 
+   * Create a backport pull request starting from the target branch and
    * the original pr to be backported
    * @param originalPullRequest original pull request
    * @param targetBranch target branch where the backport should be applied
    * @returns {GitPullRequest}
    */
   private generateBackportPullRequestsData(
-    originalPullRequest: GitPullRequest, 
-    args: Args, 
-    targetBranches: string[], 
+    originalPullRequest: GitPullRequest,
+    args: Args,
+    targetBranches: string[],
     bpBranchNames: string[]
   ): BackportPullRequest[] {
+
+    const targetRepo = originalPullRequest.targetRepo;
+    const sourceRepo = this.getBackportSourceRepo(args.bpRepo, targetRepo);
 
     const reviewers = args.reviewers ?? [];
     if (reviewers.length == 0 && args.inheritReviewers) {
       // inherit only if args.reviewers is empty and args.inheritReviewers set to true
       reviewers.push(originalPullRequest.author);
       if (originalPullRequest.mergedBy) {
-        reviewers.push(originalPullRequest.mergedBy);  
+        reviewers.push(originalPullRequest.mergedBy);
       }
     }
 
     const bodyPrefix = args.bodyPrefix ?? `**Backport:** ${originalPullRequest.htmlUrl}\r\n\r\n`;
     const body = bodyPrefix + (args.body ?? `${originalPullRequest.body}`);
-    
+
     const labels = args.labels ?? [];
     if (args.inheritLabels) {
       labels.push(...originalPullRequest.labels);
@@ -149,16 +152,17 @@ export default class PullRequestConfigsParser extends ConfigsParser {
         // so append "-${tb}" to the provided name
         backportBranch = backportBranch + `-${tb}`;
       }
-  
+
       if (backportBranch.length > 250) {
         this.logger.warn(`Backport branch (length=${backportBranch.length}) exceeded the max length of 250 chars, branch name truncated!`);
         backportBranch = backportBranch.slice(0, 250);
       }
 
       return {
-        owner: originalPullRequest.targetRepo.owner,
-        repo: originalPullRequest.targetRepo.project,
+        owner: targetRepo.owner,
+        repo: targetRepo.project,
         head: backportBranch,
+        headRepo: sourceRepo,
         base: tb,
         title: args.title ?? `[${tb}] ${originalPullRequest.title}`,
         // preserve new line chars
@@ -169,5 +173,26 @@ export default class PullRequestConfigsParser extends ConfigsParser {
         comments: args.comments?.map(c => c.replace(/\\n/g, "\n").replace(/\\r/g, "\r")) ?? [],
       };
     }) as BackportPullRequest[];
+  }
+
+  private getBackportSourceRepo(bpRepo: string | undefined, targetRepo: GitRepository): GitRepository | undefined {
+    if (!bpRepo || bpRepo.trim() === "") {
+      return undefined;
+    }
+
+    const sanitized = bpRepo.trim();
+    const parts = sanitized.split("/").map(p => p.trim()).filter(p => p.length > 0);
+    if (parts.length < 2) {
+      throw new Error(`Invalid bp repo format "${bpRepo}", expected "owner/repo"`);
+    }
+
+    const cloneUrl = new URL(targetRepo.cloneUrl);
+    cloneUrl.pathname = `/${parts.join("/")}.git`;
+
+    return {
+      owner: parts[0],
+      project: parts[parts.length - 1],
+      cloneUrl: cloneUrl.toString(),
+    };
   }
 }

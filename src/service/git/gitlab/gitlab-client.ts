@@ -9,7 +9,7 @@ import axios, { Axios } from "axios";
 import https from "https";
 
 export default class GitLabClient implements GitClient {
-  
+
   private readonly logger: LoggerService;
   private readonly apiUrl: string;
   private readonly mapper: GitLabMapper;
@@ -24,7 +24,7 @@ export default class GitLabClient implements GitClient {
         Authorization: token ? `Bearer ${token}` : "",
         "User-Agent": "kiegroup/git-backporting",
       },
-      httpsAgent: new https.Agent({  
+      httpsAgent: new https.Agent({
         rejectUnauthorized
       })
     });
@@ -38,7 +38,7 @@ export default class GitLabClient implements GitClient {
   getDefaultGitUser(): string {
     return "Gitlab";
   }
-  
+
   getDefaultGitEmail(): string {
     return "noreply@gitlab.com";
   }
@@ -76,24 +76,26 @@ export default class GitLabClient implements GitClient {
     const { namespace, project, id } = this.extractMergeRequestData(mrUrl);
     return this.getPullRequest(namespace, project, id, squash);
   }
-  
+
   // WRITE
-  
+
   async createPullRequest(backport: BackportPullRequest): Promise<string> {
     this.logger.info(`Creating pull request ${backport.head} -> ${backport.base}`);
     this.logger.info(`${JSON.stringify(backport, null, 2)}`);
 
     const projectId = this.getProjectId(backport.owner, backport.repo);
+    const sourceProjectId = backport.headRepo ? this.getProjectId(backport.headRepo.owner, backport.headRepo.project) : projectId;
 
-    const { data } = await this.client.post(`/projects/${projectId}/merge_requests`, {
+    const { data } = await this.client.post(`/projects/${sourceProjectId}/merge_requests`, {
       source_branch: backport.head,
       target_branch: backport.base,
+      ...((projectId != sourceProjectId) ? { target_project_id: projectId } : {}),
       title: backport.title,
       description: backport.body,
       reviewer_ids: [],
       assignee_ids: [],
     });
-    
+
     const mr = data as MergeRequestSchema;
     const promises = [];
 
@@ -149,7 +151,7 @@ export default class GitLabClient implements GitClient {
         }
       );
     }));
-    
+
     if (assigneeIds.length > 0) {
       this.logger.info("Setting assignees: " + assigneeIds);
       promises.push(
@@ -181,7 +183,7 @@ export default class GitLabClient implements GitClient {
     } catch(error) {
       this.logger.error(`Error creating comment on merge request ${mrUrl}: ${error}`);
     }
-    
+
     return commentUrl;
   }
 
@@ -189,21 +191,21 @@ export default class GitLabClient implements GitClient {
 
   /**
    * Retrieve a gitlab user given its username
-   * @param username 
+   * @param username
    * @returns UserSchema
    */
   private async getUser(username: string): Promise<UserSchema> {
     const { data } = await this.client.get(`/users?username=${username}`);
     const users = data as UserSchema[];
-    
+
     if (users.length > 1) {
       throw new Error("Too many users found with username=" + username);
     }
-    
+
     if (users.length == 0) {
       throw new Error("User " + username + " not found");
     }
-    
+
     return users[0];
   }
 

@@ -14,7 +14,7 @@ import { injectError, injectTargetBranch } from "./runner-util";
 interface Git {
   gitClientType: GitClientType;
   gitClientApi: Pick<GitClient, ("createPullRequest" | "createPullRequestComment")>;
-  gitCli: Pick<GitCLIService, ("clone" | "createLocalBranch" | "fetch" | "cherryPick" | "push")>;
+  gitCli: Pick<GitCLIService, ("clone" | "createLocalBranch" | "fetch" | "cherryPick" | "addRemote" | "push")>;
 }
 
 /**
@@ -42,7 +42,7 @@ export default class Runner {
 
     } catch (error) {
       this.logger.error(`${error}`);
-      
+
       this.logger.info("Process failed");
       process.exit(1);
     }
@@ -80,7 +80,7 @@ export default class Runner {
 
     // start local git operations
     const git: GitCLIService = new GitCLIService(configs.auth, configs.git);
-    
+
     const failures: string[] = [];
     // we need sequential backporting as they will operate on the same folder
     // avoid cloning the same repo multiple times
@@ -188,13 +188,23 @@ function* backportSteps(logger: Pick<LoggerService, "debug" | "info" | "warn">, 
     };
   }
 
-  if (!configs.dryRun) {
-    // 8. push the new branch to origin
+  let target_remote: string | undefined = undefined;
+
+  if (backportPR.headRepo) {
+    // 8. add fork-remote to push backport branch to
+    target_remote = "fork";
     yield async () => {
-      await git.gitCli.push(configs.folder, backportPR.head);
+        await git.gitCli.addRemote(configs.folder, backportPR.headRepo!.cloneUrl, target_remote);
+    };
+  }
+
+  if (!configs.dryRun) {
+    // 9. push the new branch to origin
+    yield async () => {
+        await git.gitCli.push(configs.folder, backportPR.head, target_remote);
     };
 
-    // 9. create pull request new branch -> target branch (using octokit)
+    // 10. create pull request new branch -> target branch (using octokit)
     yield async () => {
       const prUrl = await git.gitClientApi.createPullRequest(backportPR);
       logger.info(`Pull request created: ${prUrl}`);
@@ -232,6 +242,9 @@ async function backportScript(configs: Configs, backportPR: BackportPullRequest,
         s += cherryPickOptions + " ";
       }
       s += sha;
+    },
+    async addRemote(_cwd: string, remote: string, remoteName = "fork"): Promise<void> {
+      s += `git remote add ${remoteName} ${remote}`;
     },
     async push(_cwd: string, branch: string, remote = "origin", force = false): Promise<void> {
       s += `git push ${remote} ${branch}`;

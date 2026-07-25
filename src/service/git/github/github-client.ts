@@ -9,7 +9,7 @@ import { Octokit } from "@octokit/rest";
 import { PullRequest } from "@octokit/webhooks-types";
 
 export default class GitHubClient implements GitClient {
-  
+
   private logger: LoggerService;
   private apiUrl: string;
   private isForCodeberg: boolean;
@@ -33,7 +33,7 @@ export default class GitHubClient implements GitClient {
   getDefaultGitUser(): string {
     return this.apiUrl.includes(GitClientType.CODEBERG.toString()) ? "Codeberg" : "GitHub";
   }
-  
+
   getDefaultGitEmail(): string {
     return "noreply@github.com";
   }
@@ -92,7 +92,7 @@ export default class GitHubClient implements GitClient {
   }
 
   // WRITE
-  
+
   async createPullRequest(backport: BackportPullRequest): Promise<string> {
     this.logger.info(`Creating pull request ${backport.head} -> ${backport.base}`);
     this.logger.info(`${JSON.stringify(backport, null, 2)}`);
@@ -100,7 +100,8 @@ export default class GitHubClient implements GitClient {
     const { data } = await this.octokit.pulls.create({
       owner: backport.owner,
       repo: backport.repo,
-      head: backport.head,
+      head: backport.headRepo ? `${backport.headRepo.owner}:${backport.head}` : backport.head,
+      ...(backport.headRepo ? { head_repo: backport.headRepo.project } : {}),
       base: backport.base,
       title: backport.title,
       body: backport.body,
@@ -173,11 +174,11 @@ export default class GitHubClient implements GitClient {
         issue_number: id,
         body: comment
       });
-  
+
       if (!data) {
         throw new Error("Pull request comment creation failed");
       }
-  
+
       commentUrl = data.url;
     } catch (error) {
       this.logger.error(`Error creating comment on pull request ${prUrl}: ${error}`);

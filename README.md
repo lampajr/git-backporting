@@ -125,6 +125,7 @@ This tool comes with some inputs that allow users to override the default behavi
 | Assignees       | --assignes        | N            | Backporting pull request comma-separated assignees list                                                           | []       |
 | No Reviewers Inheritance       | --no-inherit-reviewers        | N            | Considered only if reviewers is empty, if true keep reviewers as empty list, otherwise inherit from original pull request                                                           | false       |
 | Backport Branch Names       | --bp-branch-name        | N            | Comma separated lists of the backporting pull request branch names, if they exceeds 250 chars they will be truncated                                                           | bp-{target-branch}-{sha1}...{shaN}       |
+| Backport Repository       | --bp-repo        | N            | Optional source repository (format owner/repo) where the backport branch is pushed, useful to open the PR from a fork                                                           | {target-owner}/{target-repo}       |
 | Labels       | --labels        | N            | Provide custom labels to be added to the backporting pull request                                                           | []       |
 | Inherit labels       | --inherit-labels        | N            | If enabled inherit lables from the original pull request                                                           | false       |
 | No squash       | --no-squash        | N            | Backport all commits found in the pull request. The default behavior is to only backport the first commit that was merged in the base branch. | |
@@ -148,6 +149,17 @@ Here the supported list of env variables:
 - `GIT_TOKEN`: this is considered if none of the previous envs are set.
 
 > **NOTE**: if `--auth` argument is provided, all env variables will be ignored even if not empty.
+
+#### Backport using a fork repository
+
+By default, backport branches are pushed to the same repository targeted by the original pull request.
+If you want to push the branch to a fork and open the PR from that fork, set `--bp-repo` (or action input `bp-repo`) to `owner/repo`.
+
+```bash
+$ git-backporting -tb v1 -pr https://github.com/upstream/project/pull/123 -a ***** --bp-repo my-user/project
+```
+
+In this mode you should provide a PAT with enough permissions on the fork repository.
 
 #### Configuration file example
 

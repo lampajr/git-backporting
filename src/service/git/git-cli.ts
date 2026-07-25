@@ -23,7 +23,7 @@ export default class GitCLIService {
    * Return a pre-configured SimpleGit instance able to execute commands from current
    * directory or the provided one
    * @param cwd [optional] current working directory
-   * @returns {SimpleGit} 
+   * @returns {SimpleGit}
    */
   private git(cwd?: string): SimpleGit {
     const gitConfig = { ...(cwd ? { baseDir: cwd } : {})};
@@ -66,10 +66,10 @@ export default class GitCLIService {
       await simpleGit().clone(this.remoteWithAuth(from), to, ["--quiet", "--filter=blob:none", "--shallow-submodules", "--no-tags", "--branch", branch]);
       return;
     }
-    
+
     this.logger.info(`Folder ${to} already exist. Won't clone`);
-    
-    // ensure the working tree is properly reset - no stale changes 
+
+    // ensure the working tree is properly reset - no stale changes
     // from previous (failed) backport
     const ongoingCherryPick = await this.anyConflict(to);
     if (ongoingCherryPick) {
@@ -96,7 +96,7 @@ export default class GitCLIService {
    * Add a new remote to the current repository
    * @param cwd repository in which addRemote should be performed
    * @param remote remote git link
-   * @param remoteName [optional] name of the remote, by default 'fork' is used 
+   * @param remoteName [optional] name of the remote, by default 'fork' is used
    */
   async addRemote(cwd: string, remote: string, remoteName = "fork"): Promise<void> {
     this.logger.info(`Adding new remote ${remote}`);
@@ -121,7 +121,7 @@ export default class GitCLIService {
    */
   async cherryPick(cwd: string, sha: string, strategy = "recursive", strategyOption = "theirs", cherryPickOptions: string | undefined): Promise<void> {
     this.logger.info(`Cherry picking ${sha}`);
-    
+
     let options = ["cherry-pick", "-m", "1", `--strategy=${strategy}`, `--strategy-option=${strategyOption}`];
     if (cherryPickOptions !== undefined) {
       options = options.concat(cherryPickOptions.split(" "));
@@ -163,7 +163,7 @@ export default class GitCLIService {
    */
   async push(cwd: string, branch: string, remote = "origin", force = false): Promise<void> {
     this.logger.info(`Pushing ${branch} to ${remote}`);
-    
+
     const options = ["--quiet"];
     if (force) {
       options.push("--force-with-lease");

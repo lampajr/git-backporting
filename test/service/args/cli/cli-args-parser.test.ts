@@ -242,6 +242,8 @@ describe("cli args parser", () => {
       "New Body Prefix",
       "--bp-branch-name",
       "bp_branch_name",
+      "--bp-repo",
+      "fork-user/reponame",
       "--reviewers",
       "al , john,  jack",
       "--assignees",
@@ -265,6 +267,7 @@ describe("cli args parser", () => {
     expect(args.body).toEqual("New Body");
     expect(args.bodyPrefix).toEqual("New Body Prefix");
     expect(args.bpBranchName).toEqual("bp_branch_name");
+    expect(args.bpRepo).toEqual("fork-user/reponame");
     expectArrayEqual(args.reviewers!, ["al", "john", "jack"]);
     expectArrayEqual(args.assignees!, ["pippo", "pluto", "paperino"]);
     expect(args.inheritReviewers).toEqual(false);

@@ -60,6 +60,10 @@ inputs:
       Comma separated list of backporting PR branch names. 
       Default is auto-generated from commit and target branches
     required: false
+  bp-repo:
+    description: >
+      Optional backport repository as owner/repo where the backport branch is pushed, useful to create PRs from a fork
+    required: false
   reviewers:
     description: >
       Comma separated list of reviewers for the backporting pull request
